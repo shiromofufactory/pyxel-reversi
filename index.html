@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=544" />
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="pyxel.css" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <script
+      async
+      src="https://cdn.jsdelivr.net/npm/pwacompat@2.0.6/pwacompat.min.js"
+      integrity="sha384-GOaSLecPIMCJksN83HLuYf9FToOiQ2Df0+0ntv7ey8zjUHESXhthwvq9hXAZTifA"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+    <div id="loading">Loading...</div>
+    <button id="switch" style="display: none" onclick="run()">
+      Push This Button
+    </button>
+    <canvas
+      id="canvas"
+      style="display: none"
+      oncontextmenu="event.preventDefault()"
+      tabindex="-1"
+    ></canvas>
+    <script type="module">
+      import { loadPyxel } from "../pyxel.js"
+      let pyxel
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("sw.js")
+          .then(function (registration) {
+            console.log(
+              "ServiceWorker の登録に成功しました。スコープ: ",
+              registration.scope
+            )
+          })
+          .catch(function (err) {
+            console.log("ServiceWorker の登録に失敗しました。", err)
+          })
+      }
+      ;(async function () {
+        pyxel = await loadPyxel()
+        await pyxel.fetchFiles("./", ["app.py", "bgm.json"])
+        document.getElementById("loading").remove()
+        document.getElementById("switch").style.display = "block"
+      })()
+      window.run = () => {
+        document.getElementById("switch").remove()
+        document.getElementById("canvas").style.display = "block"
+        pyxel.run("app.py")
+      }
+    </script>
+  </body>
+</html>
