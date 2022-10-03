@@ -191,7 +191,7 @@ class Board:
 class App:
     def __init__(self):
         pyxel.init(144, 168, title="Pyxel Reversi")
-        # pyxel.mouse(True)
+        pyxel.mouse(True)
         self.scene = 0  # 0:title 1:main 2:end
         self.counter = 0
         self.board = None
